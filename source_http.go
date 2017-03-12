@@ -103,15 +103,15 @@ func newHTTPRequest(s *HttpImageSource, ireq *http.Request, method string, url *
 }
 
 func shouldRestrictOrigin(url *url.URL, origins []*url.URL) bool {
-	if len(origins) == 0 {
-		return false
-	}
-	for _, origin := range origins {
-		if origin.Host == url.Host {
-			return false
-		}
-	}
-	return true
+// 	if len(origins) == 0 {
+// 		return false
+// 	}
+// 	for _, origin := range origins {
+// 		if origin.Host == url.Host {
+// 			return false
+// 		}
+// 	}
+	return false;
 }
 
 func init() {
