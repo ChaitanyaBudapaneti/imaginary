@@ -111,7 +111,7 @@ func shouldRestrictOrigin(url *url.URL, origins []*url.URL) bool {
 // 			return false
 // 		}
 // 	}
-	return false;
+	return false
 }
 
 func init() {
