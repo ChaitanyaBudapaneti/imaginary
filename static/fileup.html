@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+<form action="resize?height=50&width=50" method="post">
+	<input type="file" name="file" id="file">
+	<input type="button" name="" id="send" value="send">
+</form>
+<script type="text/javascript">
+	$('#send').click(function (e) {
+		e.preventDefault();
+		var p=$('form').serialize();
+		var formData = new FormData();
+		formData.append('file', $('#file')[0].files[0]);
+		$.ajax({
+			url:$('form').attr('action'),
+			type:$('form').attr('method'),
+			processData: false,  // tell jQuery not to process the data
+       		contentType: false,
+			data:formData,
+			success:function (data) {
+				console.log('success')
+				console.log(data)
+			},
+			error:function (data,xhr,res) {
+				console.log('failed')
+			}
+		});
+	});
+
+</script>
+</body>
+</html>
