@@ -54,7 +54,15 @@
 			success:function (data) {
 				console.log('success')
 				console.log(data)
-				 $("#image").attr('src', 'data:image/jpeg;base64,' + base64encode(data));
+				var uInt8Array = new Uint8Array(data);
+				var i = uInt8Array.length;
+				var biStr = new Array(i);
+				while (i--)
+				{ biStr[i] = String.fromCharCode(uInt8Array[i]);
+				}
+				var data = biStr.join('');
+				var base64 = window.btoa(data);
+				 $("#image").attr('src', 'data:image/jpeg;base64,' + base64);
 			},
 			error:function (data,xhr,res) {
 				console.log('failed')
