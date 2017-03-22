@@ -71,7 +71,7 @@ func NewServerMux(o ServerOptions) http.Handler {
 	image := ImageMiddleware(o)
   mux.Handle("/static/", func(w http.ResponseWriter, r *http.Request) {
         http.ServeFile(w, r, r.URL.Path[1:])
-    }))
+    })
 	mux.Handle(join(o, "/resize"), image(Resize))
   mux.Handle(join(o, "/remage"), image(Resize))
 	mux.Handle(join(o, "/enlarge"), image(Enlarge))
