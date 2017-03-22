@@ -67,9 +67,8 @@ func NewServerMux(o ServerOptions) http.Handler {
 	mux.Handle(join(o, "/"), Middleware(indexController, o))
 	mux.Handle(join(o, "/form"), Middleware(formController, o))
 	mux.Handle(join(o, "/health"), Middleware(healthController, o))
-  mux.Handle(join(o, "/static/"), func(w http.ResponseWriter, r *http.Request) {
-        http.ServeFile(w, r, r.URL.Path[1:])
-    })
+	files := http.FileServer(http.Dir(config.Static))
+	mux.Handle("/static/", http.StripPrefix("/static/", files))
 	image := ImageMiddleware(o)
 
 	mux.Handle(join(o, "/resize"), image(Resize))
