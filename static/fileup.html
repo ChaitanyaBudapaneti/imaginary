@@ -56,9 +56,9 @@
 				console.log('success')
 				console.log(response)
 				var filename = "";
-				if(response.size && response.type ){
+				//if(response.size && response.type ){
 				filename = "new.png";
-				}
+				//}
 
 				var blob = new Blob([response], {type: "image/png"}); ;
 				if (typeof window.navigator.msSaveBlob !== 'undefined') {
