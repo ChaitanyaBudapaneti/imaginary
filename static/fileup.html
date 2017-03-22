@@ -51,18 +51,39 @@
 			processData: false,  // tell jQuery not to process the data
        		contentType: false,
 			data:formData,
-			success:function (data) {
+			dataType: 'binary',
+			success:function (response, status, xhr) {
 				console.log('success')
-				console.log(data)
-				var uInt8Array = new Uint8Array(data);
-				var i = uInt8Array.length;
-				var biStr = new Array(i);
-				while (i--)
-				{ biStr[i] = String.fromCharCode(uInt8Array[i]);
+				console.log(response)
+				var filename = "";
+				if(response.size && response.type ){
+				filename = "new.png";
 				}
-				var data = biStr.join('');
-				var base64 = window.btoa(data);
-				 $("#image").attr('src', 'data:image/jpeg;base64,' + base64);
+
+				var blob = response ;
+				if (typeof window.navigator.msSaveBlob !== 'undefined') {
+				// IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+				window.navigator.msSaveBlob(blob, filename);
+				} else {
+				var URL = window.URL || window.webkitURL;
+				var downloadUrl = URL.createObjectURL(blob);
+
+				if (filename) {
+				// use HTML5 a[download] attribute to specify filename
+				var a = document.createElement("a");
+				// safari doesn't support this yet
+				if (typeof a.download === 'undefined') {
+				window.location = downloadUrl;
+				} else {
+				a.href = downloadUrl;
+				a.download = filename;
+				document.body.appendChild(a);
+				a.click();
+				}
+				}
+				}
+			
+				// $("#image").attr('src', 'data:image/jpeg;base64,' + base64);
 			},
 			error:function (data,xhr,res) {
 				console.log('failed')
