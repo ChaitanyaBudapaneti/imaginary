@@ -48,7 +48,7 @@
 		$.ajax({
 			url:$('form').attr('action'),
 			type:$('form').attr('method'),
-			processData: false,  // tell jQuery not to process the data
+			processData: true,  // tell jQuery not to process the data
        		contentType: "application/x-www-form-urlencoded",
 			data:formData,
 			//dataType: 'binary',
