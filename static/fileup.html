@@ -49,7 +49,7 @@
 			url:$('form').attr('action'),
 			type:$('form').attr('method'),
 			processData: false,  // tell jQuery not to process the data
-       		contentType: false,
+       		contentType: "application/x-www-form-urlencoded",
 			data:formData,
 			//dataType: 'binary',
 			success:function (response, status, xhr) {
