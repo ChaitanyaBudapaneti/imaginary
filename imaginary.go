@@ -32,7 +32,7 @@ var (
 	aAuthForwarding    = flag.Bool("enable-auth-forwarding", false, "Forwards X-Forward-Authorization or Authorization header to the image source server. -enable-url-source flag must be defined. Tip: secure your server from public access to prevent attack vectors")
 	aEnableURLSource   = flag.Bool("enable-url-source", false, "Enable remote HTTP URL image source processing")
 	aEnablePlaceholder = flag.Bool("enable-placeholder", false, "Enable image response placeholder to be used in case of error")
-	aAlloweOrigins     = flag.String("allowed-origins", "", "Restrict remote image source processing to certain origins (separated by commas)")
+	aAlloweOrigins     = flag.String("allowed-origins", "*", "Restrict remote image source processing to certain origins (separated by commas)")
 	aMaxAllowedSize    = flag.Int("max-allowed-size", 0, "Restrict maximum size of http image source (in bytes)")
 	aKey               = flag.String("key", "", "Define API key for authorization")
 	aMount             = flag.String("mount", "", "Mount server local directory")
