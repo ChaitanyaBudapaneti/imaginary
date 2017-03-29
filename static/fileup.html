@@ -12,119 +12,42 @@
 </form>
 <script type="text/javascript">
 	
-// 	function base64Encode(str) {
-//         var CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-//         var out = "", i = 0, len = str.length, c1, c2, c3;
-//         while (i < len) {
-//             c1 = str.charCodeAt(i++) & 0xff;
-//             if (i == len) {
-//                 out += CHARS.charAt(c1 >> 2);
-//                 out += CHARS.charAt((c1 & 0x3) << 4);
-//                 out += "==";
-//                 break;
-//             }
-//             c2 = str.charCodeAt(i++);
-//             if (i == len) {
-//                 out += CHARS.charAt(c1 >> 2);
-//                 out += CHARS.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
-//                 out += CHARS.charAt((c2 & 0xF) << 2);
-//                 out += "=";
-//                 break;
-//             }
-//             c3 = str.charCodeAt(i++);
-//             out += CHARS.charAt(c1 >> 2);
-//             out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
-//             out += CHARS.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
-//             out += CHARS.charAt(c3 & 0x3F);
-//         }
-//         return out;
-//     }
+function uploadFiles(url, files) {
+  var formData = new FormData();
+
+  for (var i = 0, file; file = files[i]; ++i) {
+    formData.append(file.name, file);
+  }
+  window.URL = window.URL || window.webkitURL;  // Take care of vendor prefixes.
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url, true);
+  xhr.responseType = 'blob';
+
+  xhr.onload = function(e) {
+  if (this.status == 200) {
+    var blob = this.response;
+
+    var img = document.createElement('img');
+    img.onload = function(e) {
+      window.URL.revokeObjectURL(img.src); // Clean up after yourself.
+    };
+    img.src = window.URL.createObjectURL(blob);
+    document.body.appendChild(img);    
+  }
+};
+
+  xhr.send(formData);  // multipart/form-data
+}
+
+
+document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+  uploadFiles('https://remaze.herokuapp.com/resize?height=50&width=50', this.files);
+}, false);
 	
-	$('#send').click(function (e) {
-		function base64Encode(str) {
-        var CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-        var out = "", i = 0, len = str.length, c1, c2, c3;
-        while (i < len) {
-            c1 = str.charCodeAt(i++) & 0xff;
-            if (i == len) {
-                out += CHARS.charAt(c1 >> 2);
-                out += CHARS.charAt((c1 & 0x3) << 4);
-                out += "==";
-                break;
-            }
-            c2 = str.charCodeAt(i++);
-            if (i == len) {
-                out += CHARS.charAt(c1 >> 2);
-                out += CHARS.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
-                out += CHARS.charAt((c2 & 0xF) << 2);
-                out += "=";
-                break;
-            }
-            c3 = str.charCodeAt(i++);
-            out += CHARS.charAt(c1 >> 2);
-            out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
-            out += CHARS.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
-            out += CHARS.charAt(c3 & 0x3F);
-        }
-        return out;
-    }
+
 		
-		e.preventDefault();
-		var p=$('form').serialize();
-		var formData = new FormData();
-		formData.append('file', $('#file')[0].files[0]);
-		$.ajax({
-			url:$('form').attr('action'),
-			type:$('form').attr('method'),
-			processData: false,  // tell jQuery not to process the data
-       		contentType: false,
-			data:formData,
-			//dataType: 'binary',
-			 success: function(response, status, xhr) {
-		        // check for a filename
-		        var filename = "";
-		        var disposition = xhr.getResponseHeader('Content-Disposition');
-		        if (disposition && disposition.indexOf('attachment') !== -1) {
-		            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-		            var matches = filenameRegex.exec(disposition);
-		            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-		        }
-
-		        var type = xhr.getResponseHeader('Content-Type');
-		        var blob = new Blob([response], { type: type });
-
-		        if (typeof window.navigator.msSaveBlob !== 'undefined') {
-		            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
-		            window.navigator.msSaveBlob(blob, filename);
-		        } else {
-		            var URL = window.URL || window.webkitURL;
-		            var downloadUrl = URL.createObjectURL(blob);
-
-		            if (filename) {
-		                // use HTML5 a[download] attribute to specify filename
-		                var a = document.createElement("a");
-		                // safari doesn't support this yet
-		                if (typeof a.download === 'undefined') {
-		                    window.location = downloadUrl;
-		                } else {
-		                    a.href = downloadUrl;
-		                    a.download = filename;
-		                    document.body.appendChild(a);
-		                    a.click();
-		                }
-		            } else {
-		                window.location = downloadUrl;
-		            }
-
-		            setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
-		        }
-		    },
-			error:function (data,xhr,res) {
-				console.log('failed')
-			}
-		});
-		
-	});
+	
 </script>
 </body>
 </html>
