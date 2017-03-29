@@ -27,7 +27,7 @@ var (
 	aHelp              = flag.Bool("h", false, "Show help")
 	aHelpl             = flag.Bool("help", false, "Show help")
 	aPathPrefix        = flag.String("path-prefix", "/", "Url path prefix to listen to")
-	aCors              = flag.Bool("cors", false, "Enable CORS support")
+	aCors              = flag.Bool("cors", true, "Enable CORS support")
 	aGzip              = flag.Bool("gzip", false, "Enable gzip compression")
 	aAuthForwarding    = flag.Bool("enable-auth-forwarding", false, "Forwards X-Forward-Authorization or Authorization header to the image source server. -enable-url-source flag must be defined. Tip: secure your server from public access to prevent attack vectors")
 	aEnableURLSource   = flag.Bool("enable-url-source", false, "Enable remote HTTP URL image source processing")
